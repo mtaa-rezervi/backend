@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
     res.send(room);
 });
 
-module.exports = router
+module.exports = router;
 
 /*
 await Room.create({

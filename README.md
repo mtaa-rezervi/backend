@@ -1,2 +1,2 @@
 # backend
-Backend for out workspace rezervation app
+Backend for out workspace reservation app

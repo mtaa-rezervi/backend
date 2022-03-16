@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoose = require('mongoose');
 
 dotenv.config();
@@ -19,7 +18,7 @@ app.get('/', (req, res) => {
 const testRouter = require('./routes/test');
 
 // Middleware
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use('/test', testRouter);
 
 // Start the server
