@@ -23,4 +23,4 @@ app.use(bodyParser.json())
 app.use('/test', testRouter);
 
 // Start the server
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(process.env.PORT || 3000, () => console.log('Server running on port 3000'));
