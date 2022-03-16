@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Room = require('../models/Rooms')
+const Room = require('../models/Rooms');
 
 router.get('/', async (req, res) => {
-    const room = await Room.findOne({})
+    const room = await Room.findOne({});
     res.send(room);
 });
 
