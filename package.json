@@ -2,7 +2,7 @@
   "name": "rezervi-backend",
   "version": "1.0.0",
   "description": "backend for our workspace reservation app",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "devStart": "nodemon server.js"
   },
