@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Room = require('../models/Rooms');
+const middleware = require('./middleware')
 
-router.get('/', async (req, res) => {    
+router.get('/', middleware.verifyJWT, async (req, res) => {
     const room = await Room.find({});
     res.send(room);
 });
