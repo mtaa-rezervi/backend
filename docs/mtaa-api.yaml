@@ -635,8 +635,8 @@ paths:
                   type: string
                   example: 'password'
       responses:
-        '200':
-          description: Ok
+        '201':
+          description: Created
           content:
             application/json:
               schema:

@@ -16,10 +16,12 @@ app.get('/', (req, res) => {
 
 // Import routes
 const testRouter = require('./routes/test');
+const authRouter = require('./routes/users/auth');
 
 // Middleware
 app.use(bodyParser.json());
 app.use('/test', testRouter);
+app.use('/users', authRouter);
 
 // Start the server
 app.listen(process.env.PORT || 3000, () => console.log('Server running'));
