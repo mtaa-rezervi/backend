@@ -9,11 +9,13 @@ const verifyJWT = (req, res, next) => {
     authToken = authToken.split(' ')[1];
 
     // Checks correctness of the token
-    const verified = jwt.verify(authToken, process.env.JWT_SECRET);
-    if (!verified) return res.status(401).send({ error: { message: 'Invalid auth-token' } });
-
-    req.user = verified
-    next()  
+    try {
+        const verified = jwt.verify(authToken, process.env.JWT_SECRET);
+        req.user = verified
+        next()  
+    } catch(err) {
+        return res.status(401).send({ error: { message: 'Invalid auth-token' } });
+    }
 };
 
 exports.verifyJWT = verifyJWT;
