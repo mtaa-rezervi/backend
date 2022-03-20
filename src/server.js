@@ -14,14 +14,12 @@ app.get('/', (req, res) => {
     res.send('<font face="Trebuchet MS" size="20px" color="#03a5fc"> Hello ✌️</font>');
 });
 
-// Import routes
-const testRouter = require('./routes/test');
-const authRouter = require('./routes/users/auth');
-
 // Middleware
 app.use(bodyParser.json());
-app.use('/test', testRouter);
-app.use('/users', authRouter);
+
+// Routes
+app.use('/test', require('./routes/test'));
+app.use('/users', require('./routes/users'));
 
 // Start the server
 app.listen(process.env.PORT || 3000, () => console.log('Server running'));
