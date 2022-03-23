@@ -8,18 +8,18 @@ const reservationsSubSchema = mongoose.Schema({
 */
 
 const roomSchema = new mongoose.Schema({
-    name: { type: String, default: '' },
-    floor: { type: Number, default: -100 },
-    room_number: { type: Number, default: -100 },
+    name: { type: String, required: true },
+    floor: { type: Number, required: true },
+    room_number: { type: Number, required: true },
     info: { type: String, default: '' },
     address: {
-        street: { type: String, default: '' },
-        city: { type: String, default: '' },
-        state: { type: String, default: '' },
-        zip: { type: String, default: '' },
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String, required: true },
+        zip: { type: String, required: true },
     }, 
     owner_id: { type: Schema.Types.ObjectId, ref: 'User' },
-    number_of_seats: { type: Number, default: -100 },
+    number_of_seats: { type: Number, required: true },
     amenities: [String],
     thumbnail_url: { type: String, default: '' },
     image_urls: [String],
