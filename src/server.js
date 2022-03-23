@@ -18,7 +18,6 @@ app.get('/', (req, res) => {
 app.use(bodyParser.json());
 
 // Routes
-app.use('/test', require('./routes/test'));
 app.use('/users', require('./routes/users'));
 app.use('/rooms', require('./routes/rooms'));
 app.use('/reservations', require('./routes/reservations'));
