@@ -17,9 +17,11 @@ router.delete('/:id', middleware.verifyJWT, async (req, res) => {
     const reservation = await Reservation.findById(reservationID);
     if (!reservation) return res.status(404).send({ error: { message: 'Record doesnt exist' } }); 
 
+    // Remove specified Reservation from User and Room
     await User.findByIdAndUpdate(reservation.user_id, { $pull: { active_reservations: reservationID }});
     await Room.findByIdAndUpdate(reservation.room_id, { $pull: { reservations: reservationID }});
 
+    // Delete specified Reservation
     await Reservation.deleteOne({ _id: reservationID });
 
     res.status(204).send();

@@ -10,18 +10,21 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
     req.query.room_id ? (mongoQuery.room_id = req.query.room_id) : '';
     req.query.user_id ? (mongoQuery.user_id = req.query.user_id) : '';
     
+    /*
     if (req.query.reservation_lte) {
         const reservation_lte = new Date(req.query.reservation_lte).toISOString();
         mongoQuery.reserved_from = { '$lte': reservation_lte };
-    }; 
+    }
 
     if (req.query.reservation_gte) {
         const reservation_gte = new Date(req.query.reservation_gte).toISOString();
         mongoQuery.reserved_to = { '$gte': reservation_gte };
-    }; 
+    } 
+    */
 
-    console.log(mongoQuery);
+    //console.log(mongoQuery);
 
+    // Find Reservations based on specified query
     const reservations = await Reservation.find(mongoQuery);
     res.send(reservations);
 });
