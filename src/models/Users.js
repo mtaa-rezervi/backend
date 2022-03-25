@@ -15,9 +15,12 @@ const userSchema = new mongoose.Schema({
     reservation_history: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
     active_reservations: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
     active_listings: [{ type: Schema.Types.ObjectId, ref: 'Room' }],
-    notifications: [{ type: Object }],
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
+    notifications: [{ type: Object }]
 }, {versionKey: false});
+
+userSchema.set('timestamps', {
+    createdAt: 'created_at', 
+    updatedAt: 'updated_at'
+});
 
 module.exports = mongoose.model('User', userSchema);
