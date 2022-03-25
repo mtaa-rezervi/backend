@@ -23,9 +23,12 @@ const roomSchema = new mongoose.Schema({
     amenities: [String],
     thumbnail_url: { type: String, default: '' },
     image_urls: [String],
-    reservations: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
+    reservations: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }]
 }, {versionKey: false});
+
+roomSchema.set('timestamps', {
+    createdAt: 'created_at', 
+    updatedAt: 'updated_at' 
+});
 
 module.exports = mongoose.model('Room', roomSchema);
