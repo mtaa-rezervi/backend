@@ -5,4 +5,8 @@ const router = express.Router();
 router.use('/', require('./getReservations'));
 router.use('/', require('./createReservation'));
 
+// /{id}
+router.use('/', require('./getReservation'));
+router.use('/', require('./deleteReservation'));
+
 module.exports = router;

@@ -15,7 +15,7 @@ router.post('/', middleware.verifyJWT, async (req, res) => {
         reserved_to: req.body.reserved_to
     });
 
-    await User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.owner_id), { $push: { active_reservations: newReservation._id } });
+    await User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.user_id), { $push: { active_reservations: newReservation._id } });
     await Room.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.room_id), { $push: { reservations: newReservation._id } });
 
     res.status(201).send(newReservation);
