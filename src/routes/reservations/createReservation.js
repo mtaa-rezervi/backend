@@ -14,7 +14,6 @@ async function roomIDValidation(id) {
         if (!roomExists) throw 'Wrong room_id';
         return null;
     } catch {
-        //throw new Error('some error');
         return { field: 'room_id', message: 'wrong room_id' };
     }
 }
@@ -25,7 +24,6 @@ async function userIDValidation(id) {
         if (!userExists) throw 'Wrong user_id';
         return null;
     } catch {
-        //throw new Error('some error');
         return { field: 'user_id', message: 'wrong user_id' };
     }
 }
@@ -36,8 +34,8 @@ router.post('/', middleware.verifyJWT, async (req, res) => {
 
     // Schema for validating request body
     const schema = Joi.object({
-        room_id: Joi.string().hex().length(24),
-        user_id: Joi.string().hex().length(24),
+        room_id: Joi.string().hex().length(24).required(),
+        user_id: Joi.string().hex().length(24).required(),
         reserved_from: Joi.date().iso().required(),
         reserved_to: Joi.date().iso().required()
     });
@@ -45,10 +43,8 @@ router.post('/', middleware.verifyJWT, async (req, res) => {
     // Validate request body
     let { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
-        //const messages = error.details.map(x => ({ 'field': x.path[0], 'message': x.message.replace(/"/g, '') }));
         var errorFields = error.details.map(x => (x.path[0]));
         error.details.map(x => (errorMessages.errors.push({ 'field': x.path[0], 'message': x.message.replace(/"/g, '') })));
-        //return res.status(422).send({ errors: messages });
     }
 
     // Check whether specified User or Room exists
