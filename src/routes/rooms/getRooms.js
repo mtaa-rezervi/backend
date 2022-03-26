@@ -9,7 +9,7 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
     
     // name
     if(req.query.name){
-        mongoQuery.name = req.query.name;
+        mongoQuery.name = { $regex: req.query.name };
     }
 
     // num_of_seats_gte, num_of_seats_lte
@@ -36,7 +36,7 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
     // Find Rooms based on specified query
     const rooms = await Room.find(mongoQuery);
     console.log(mongoQuery, rooms.length);
-    res.send(rooms);
+    res.status(200).send(rooms);
 });
 
 module.exports = router;
