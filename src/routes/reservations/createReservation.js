@@ -7,7 +7,7 @@ const Reservation = require('../../models/Reservations')
 const mongoose = require('mongoose')
 const Joi = require('joi')
 
-// Room and User ID validation functions
+// Room and User ID validation methods
 async function roomIDValidation(id) {
     try {
         const roomExists = await Room.exists({ _id: id });

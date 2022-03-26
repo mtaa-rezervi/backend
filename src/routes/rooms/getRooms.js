@@ -5,8 +5,39 @@ const Room = require('../../models/Rooms');
 
 // Returns a list of rooms
 router.get('/', middleware.verifyJWT, async (req, res) => {
-    const room = await Room.find();
-    res.send(room);
+    let mongoQuery = {};
+    
+    // name
+    if(req.query.name){
+        mongoQuery.name = { $regex: req.query.name };
+    }
+
+    // num_of_seats_gte, num_of_seats_lte
+    if(req.query.num_of_seats_gte && req.query.num_of_seats_lte){
+        mongoQuery.number_of_seats = { $gte: req.query.num_of_seats_gte, $lte: req.query.num_of_seats_lte };
+    }
+    else if(req.query.num_of_seats_gte){
+        mongoQuery.number_of_seats = { $gte: req.query.num_of_seats_gte };
+    }
+    else if(req.query.num_of_seats_lte){
+        mongoQuery.number_of_seats = { $lte: req.query.num_of_seats_lte }
+    }
+
+    // amenity
+    if(req.query.amenity){
+        mongoQuery.amenities = { $all: req.query.amenity }
+    }
+    // owner id
+    if(req.query.owner_id){
+        mongoQuery.owner_id = req.query.owner_id;
+    }
+
+
+    // Find Rooms based on specified query
+    const rooms = await Room.find(mongoQuery);
+    res.status(200).send(rooms);
+
+    //console.log(mongoQuery, rooms.length);
 });
 
 module.exports = router;
