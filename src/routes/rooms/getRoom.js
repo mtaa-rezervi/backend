@@ -8,7 +8,7 @@ router.get('/:id', middleware.verifyJWT, async (req, res) => {
     try {
         const room = await Room.findById(req.params.id);
         if (!room) throw 'Room does not exist.';
-        res.send(room);
+        res.status(200).send(room);
     } catch (err) {
         res.status(404).send({ error: { message: 'Room was not found.' } });
     }
