@@ -35,8 +35,9 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
 
     // Find Rooms based on specified query
     const rooms = await Room.find(mongoQuery);
-    console.log(mongoQuery, rooms.length);
     res.status(200).send(rooms);
+
+    //console.log(mongoQuery, rooms.length);
 });
 
 module.exports = router;

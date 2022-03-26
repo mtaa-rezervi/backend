@@ -3,6 +3,7 @@ const router = express.Router();
 
 // /rooms routes //
 router.use('/', require('./getRooms'));
+router.use('/', require('./getRoom'));
 router.use('/', require('./createRoom'));
 
 module.exports = router;
