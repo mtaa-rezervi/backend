@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
 });
 
 // Method for uploading file into the AWS S3 bucket
-const uploadFile = async (file, fileName) => {
+async function uploadFile(file, fileName) {
     // Upload parameters
     const params = {
         Bucket: BUCKET_NAME,
@@ -20,10 +20,14 @@ const uploadFile = async (file, fileName) => {
     };
 
     // Upload the file
-    s3.upload(params, function(err, data) {
+    const dataURL = s3.upload(params).promise().then(function(data) {
+        //console.log(`File uploaded successfully. ${data.Location}`);
+        return data.Location;
+    }).catch(function(err) {
         if (err) throw err 
-        console.log(`File uploaded successfully. ${data.Location}`)
     });
+
+    return dataURL;
 };
 
 exports.uploadFile = uploadFile;

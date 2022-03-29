@@ -16,7 +16,8 @@ const router = express.Router({ mergeParams: true });
 router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) => {
     //console.log(JSON.parse(req.body.json))
     try {
-        await uploadFile(req.file, 'users/'+req.params.id+'/'+'profile_pic/'+req.file.originalname);
+        const dataURL = await uploadFile(req.file, 'users/'+req.params.id+'/'+'profile_pic/'+req.file.originalname);
+        console.log(`File uploaded successfully. ${dataURL}`)
     } catch (err) {
         console.log(err)
         return res.status(500).send({ error: { message: 'Something went wrong :(' }});
