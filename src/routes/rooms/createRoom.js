@@ -36,8 +36,8 @@ router.post('/', middleware.verifyJWT, upload.fields([{ name: 'thumbnail', maxCo
         return res.status(422).send({ errors: errorMessages });
     }
 
-    // Creates a new room
-    const newRoom = await Room.create({
+    // Create a new room
+    const newRoom = new Room({
         name: req.body.name,
         floor: req.body.floor,
         room_number: req.body.room_number,
@@ -78,6 +78,9 @@ router.post('/', middleware.verifyJWT, upload.fields([{ name: 'thumbnail', maxCo
             return res.status(500).send({ error: { message: 'Something went wrong :(' }});
         }
     }
+
+    // Save the new room to the database
+    await Room.create(newRoom)
 
     // Add to active listings 
     await User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.owner_id), { $push: { active_listings: newRoom._id } });
