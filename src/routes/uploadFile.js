@@ -10,8 +10,8 @@ const s3 = new AWS.S3({
     region: process.env.AWS_REGION
 });
 
-// Method for uploading file into the AWS S3 bucket
-async function uploadFile(file, fileName) {
+// Method for uploading files into the AWS S3 bucket
+const uploadFile = async (file, fileName) => {
     // Upload parameters
     const params = {
         Bucket: BUCKET_NAME,
@@ -24,7 +24,7 @@ async function uploadFile(file, fileName) {
         //console.log(`File uploaded successfully. ${data.Location}`);
         return data.Location;
     }).catch(function(err) {
-        if (err) throw err 
+        if (err) throw err;
     });
 
     return dataURL;

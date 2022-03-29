@@ -14,17 +14,6 @@ const router = express.Router({ mergeParams: true });
 // Updates particular user 
 //upload.fields([{ name: 'json' }, { name: 'image' }])
 router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) => {
-    //console.log(JSON.parse(req.body.json))
-    try {
-        const dataURL = await uploadFile(req.file, 'users/'+req.params.id+'/'+'profile_pic/'+req.file.originalname);
-        console.log(`File uploaded successfully. ${dataURL}`)
-    } catch (err) {
-        console.log(err)
-        return res.status(500).send({ error: { message: 'Something went wrong :(' }});
-    }
-
-    //return res.send(req.file)
-
     try {
         var user = await Users.findById(
             mongoose.Types.ObjectId(req.params.id), 
@@ -47,14 +36,28 @@ router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) =
             type: Joi.string().required(),
             from_user: Joi.string().hex().length(24),
             text: Joi.string().required()
-          })
+        })
     });
+    
+    if (req.body.json) req.body = JSON.parse(req.body.json);
 
     // Validate request body
     let { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
         const errorMessages = error.details.map(x => ({ 'field': x.path[0], 'message': x.message.replace(/"/g, '') }));
         return res.status(422).send({ errors: errorMessages });
+    }
+
+    if (req.file) {
+        try {
+            const imagePath = 'users/'+req.params.id+'/'+'profile_pic/'+req.file.originalname
+            const dataURL = await uploadFile(req.file, imagePath);
+            //console.log(`File uploaded successfully. ${dataURL}`);
+            user.profile_pic = dataURL;
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send({ error: { message: 'Something went wrong :(' }});
+        }
     }
 
     // Update the user document
