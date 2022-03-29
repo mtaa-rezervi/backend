@@ -6,7 +6,7 @@ const Users = require('../../models/Users');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 
-// Returns reservation based on specified id
+// Updates particular user 
 router.put('/', middleware.verifyJWT, async (req, res) => {
     try {
         var user = await Users.findById(

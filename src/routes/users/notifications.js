@@ -4,7 +4,7 @@ const middleware = require('../middleware')
 const mongoose = require('mongoose');
 const Users = require('../../models/Users');
 
-// Returns reservation based on specified id
+// Returns a list of users notifications
 router.get('/', middleware.verifyJWT, async (req, res) => {
     try {
         const user = await Users.findById(mongoose.Types.ObjectId(req.params.id), '_id notifications');
