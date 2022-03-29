@@ -898,6 +898,11 @@ components:
         owner_id:
             type: string
             example: "578f6fa2df35c7fbdbaed8cf"
+        reservations:
+          type: array
+          items:
+            type: string
+            example: "623dae9b35df97c5ea632c8e"
     
     Reservations:
       type: array

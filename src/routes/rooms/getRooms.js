@@ -32,12 +32,9 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
         mongoQuery.owner_id = req.query.owner_id;
     }
 
-
     // Find Rooms based on specified query
-    const rooms = await Room.find(mongoQuery);
+    const rooms = await Room.find(mongoQuery, '_id name info amenities number_of_seats thumbnail_url');
     res.status(200).send(rooms);
-
-    //console.log(mongoQuery, rooms.length);
 });
 
 module.exports = router;
