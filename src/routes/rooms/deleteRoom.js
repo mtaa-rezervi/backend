@@ -24,7 +24,7 @@ router.delete('/:id', middleware.verifyJWT, async (req, res) => {
     await User.updateMany({ active_reservations: { $in: roomID } }, { $pull: { active_reservations: roomID } });
 
     // Remove Reservations for specified Room
-    await Reservation.deleteMany({ room_id:  roomID});
+    await Reservation.deleteMany({ room_id: roomID});
 
     // Remove specified Room
     await Room.deleteOne({ _id: roomID });
@@ -33,6 +33,3 @@ router.delete('/:id', middleware.verifyJWT, async (req, res) => {
 });
 
 module.exports = router;
-
-// await User.findByIdAndUpdate(reservation.user_id, { $pull: { active_reservations: reservationID }});
-// await Room.findByIdAndUpdate(reservation.room_id, { $pull: { reservations: reservationID }});
