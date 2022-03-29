@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const upload = multer();
 const router = express.Router({ mergeParams: true });
 const middleware = require('../middleware')
 const mongoose = require('mongoose');
@@ -7,7 +9,10 @@ const Joi = require('joi');
 const bcrypt = require('bcrypt');
 
 // Updates particular user 
-router.put('/', middleware.verifyJWT, async (req, res) => {
+router.put('/', middleware.verifyJWT, upload.any(), async (req, res) => {
+    //console.log(req.body.test)
+    //return res.send(req.files)
+
     try {
         var user = await Users.findById(
             mongoose.Types.ObjectId(req.params.id), 
