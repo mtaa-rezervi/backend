@@ -454,13 +454,8 @@ paths:
           description: Unprocessable Entity
           content:
             application/json:
-              schema: 
-                  type: object
-                  properties: 
-                    error:
-                      type: object
-                      example: 
-                        message: "Missing email"
+              schema:
+               $ref:  '#/components/schemas/ErrorBadBody'
   /users/{id}/active-reservations:
     get:
       security:
@@ -482,7 +477,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserReservations'
+                $ref: '#/components/schemas/UserActiveReservations'
         '404':
           description: Not Found
           content:
@@ -516,7 +511,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserReservations'
+                $ref: '#/components/schemas/UserRooms'
         '404':
           description: Not Found
           content:
@@ -550,7 +545,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserReservations'
+                $ref: '#/components/schemas/UserHistoryReservations'
         '404':
           description: Not Found
           content:
@@ -723,7 +718,7 @@ components:
           type: string
           example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ'
           
-    UserReservations:
+    UserActiveReservations:
       type: object
       properties:
         id:
@@ -734,7 +729,31 @@ components:
           items:
             type: object
             properties:
-              reservation_id: 
+              id: 
+                type: string
+                example: '578f6fa2df35c7fbdbaed8fb'
+              room_id:
+                type: string
+                example: '578f6fa2df35c7fbdbaed8d9'
+              reserved_from:
+                type: string
+                format: date-time
+              reserved_to:
+                type: string
+                format: date-time
+    
+    UserHistoryReservations:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '578f6fa2df35c7fbdbaed8cf'
+        reservation_history:
+          type: array
+          items:
+            type: object
+            properties:
+              id: 
                 type: string
                 example: '578f6fa2df35c7fbdbaed8fb'
               room_id:
@@ -770,6 +789,41 @@ components:
               text:
                 type: string
                 example: 'Missed call from User1.'
+                
+    UserRooms:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '578f6fa2df35c7fbdbaed8cf'
+        active_listings:
+          type: array
+          items: 
+            type: object
+            properties:
+              id:
+                type: string
+                example: '578f6fa2df35c7fbdbaed8d9'
+              name:
+                type: string
+                example: 'Big conference room'
+              info:
+                type: string
+                example: "Very nice room, big windows."
+              amenities:
+                type: array
+                items:
+                  type: string
+                example:
+                  ["wifi", "whiteboard"]
+              num_of_seats:
+                type: integer
+                format: int32
+                example: 6
+              thumbnail_url:
+                type: string
+                format: url
+                example: "https://server.com/images/room1_thumbnail.jpeg"
           
     Rooms:
       type: array
@@ -782,6 +836,9 @@ components:
           name:
             type: string
             example: 'Big conference room'
+          info:
+            type: string
+            example: "Very nice room, big windows."
           amenities:
             type: array
             items:
