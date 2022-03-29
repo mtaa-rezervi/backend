@@ -12,7 +12,6 @@ const router = express.Router({ mergeParams: true });
 
 
 // Updates particular user 
-//upload.fields([{ name: 'json' }, { name: 'image' }])
 router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) => {
     try {
         var user = await Users.findById(
@@ -52,7 +51,6 @@ router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) =
         try {
             const imagePath = 'users/'+req.params.id+'/'+'profile_pic/'+req.file.originalname
             const dataURL = await uploadFile(req.file, imagePath);
-            //console.log(`File uploaded successfully. ${dataURL}`);
             user.profile_pic = dataURL;
         } catch (err) {
             console.log(err);

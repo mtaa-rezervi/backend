@@ -1,8 +1,5 @@
 const AWS = require('aws-sdk');
 
-// Enter the name of the bucket that you have created here
-const BUCKET_NAME = process.env.AWS_BUCKET;
-
 // Initializing S3 Interface
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -14,7 +11,7 @@ const s3 = new AWS.S3({
 const uploadFile = async (file, fileName) => {
     // Upload parameters
     const params = {
-        Bucket: BUCKET_NAME,
+        Bucket: process.env.AWS_BUCKET,
         Key: fileName,
         Body: file.buffer
     };
