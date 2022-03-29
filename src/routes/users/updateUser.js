@@ -1,17 +1,28 @@
 const express = require('express');
 const multer = require('multer');
-const upload = multer();
-const router = express.Router({ mergeParams: true });
 const middleware = require('../middleware')
 const mongoose = require('mongoose');
 const Users = require('../../models/Users');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
+const { uploadFile } = require('../uploadFile')
+
+const upload = multer();
+const router = express.Router({ mergeParams: true });
+
 
 // Updates particular user 
-router.put('/', middleware.verifyJWT, upload.any(), async (req, res) => {
-    //console.log(req.body.test)
-    //return res.send(req.files)
+//upload.fields([{ name: 'json' }, { name: 'image' }])
+router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) => {
+    //console.log(JSON.parse(req.body.json))
+    try {
+        await uploadFile(req.file, 'users/'+req.params.id+'/'+'profile_pic/'+req.file.originalname);
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ error: { message: 'Something went wrong :(' }});
+    }
+
+    //return res.send(req.file)
 
     try {
         var user = await Users.findById(
@@ -57,6 +68,5 @@ router.put('/', middleware.verifyJWT, upload.any(), async (req, res) => {
 
     res.send(user)
 });
-
 
 module.exports = router;
