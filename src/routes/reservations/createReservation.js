@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const middleware = require('../middleware')
 const Room = require('../../models/Rooms');
 const User = require('../../models/Users');
@@ -7,8 +6,10 @@ const Reservation = require('../../models/Reservations')
 const mongoose = require('mongoose')
 const Joi = require('joi')
 
+const router = express.Router();
+
 // Room and User ID validation methods
-async function roomIDValidation(id) {
+const roomIDValidation = async (id) => {
     try {
         const roomExists = await Room.exists({ _id: id });
         if (!roomExists) throw 'Wrong room_id';
@@ -16,9 +17,9 @@ async function roomIDValidation(id) {
     } catch {
         return { field: 'room_id', message: 'wrong room_id' };
     }
-}
+};
 
-async function userIDValidation(id) {
+const userIDValidation = async (id) => {
     try {
         const userExists = await User.exists({ _id: id });
         if (!userExists) throw 'Wrong user_id';
@@ -26,7 +27,7 @@ async function userIDValidation(id) {
     } catch {
         return { field: 'user_id', message: 'wrong user_id' };
     }
-}
+};
 
 // Creates a new reservation
 router.post('/', middleware.verifyJWT, async (req, res) => {

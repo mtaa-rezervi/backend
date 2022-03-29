@@ -1,13 +1,18 @@
 const express = require('express');
-const router = express.Router({ mergeParams: true });
+const multer = require('multer');
 const middleware = require('../middleware')
 const mongoose = require('mongoose');
 const Users = require('../../models/Users');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
+const { uploadFile } = require('../uploadFile')
+
+const upload = multer();
+const router = express.Router({ mergeParams: true });
+
 
 // Updates particular user 
-router.put('/', middleware.verifyJWT, async (req, res) => {
+router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) => {
     try {
         var user = await Users.findById(
             mongoose.Types.ObjectId(req.params.id), 
@@ -30,14 +35,27 @@ router.put('/', middleware.verifyJWT, async (req, res) => {
             type: Joi.string().required(),
             from_user: Joi.string().hex().length(24),
             text: Joi.string().required()
-          })
+        })
     });
+    
+    if (req.body.json) req.body = JSON.parse(req.body.json);
 
     // Validate request body
     let { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
         const errorMessages = error.details.map(x => ({ 'field': x.path[0], 'message': x.message.replace(/"/g, '') }));
         return res.status(422).send({ errors: errorMessages });
+    }
+
+    if (req.file) {
+        try {
+            const imagePath = 'users/'+req.params.id+'/'+'profile_pic/'+req.file.originalname
+            const dataURL = await uploadFile(req.file, imagePath);
+            user.profile_pic = dataURL;
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send({ error: { message: 'Something went wrong :(' }});
+        }
     }
 
     // Update the user document
@@ -52,6 +70,5 @@ router.put('/', middleware.verifyJWT, async (req, res) => {
 
     res.send(user)
 });
-
 
 module.exports = router;
