@@ -54,8 +54,8 @@ router.post('/', middleware.verifyJWT, upload.fields([{ name: 'thumbnail', maxCo
     });
 
     // Upload thumbnail
-    const thumbnail = req.files['thumbnail'][0];
-    if (thumbnail) {
+    if (req.files['thumbnail']) {
+        const thumbnail = req.files['thumbnail'][0];
         try {
             const imagePath = 'rooms/'+newRoom._id+'/'+'thumbnail/'+thumbnail.originalname;
             const dataURL = await uploadFile(thumbnail, imagePath);

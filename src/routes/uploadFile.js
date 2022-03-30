@@ -18,7 +18,6 @@ const uploadFile = async (file, fileName) => {
 
     // Upload the file
     const dataURL = s3.upload(params).promise().then(function(data) {
-        //console.log(`File uploaded successfully. ${data.Location}`);
         return data.Location;
     }).catch(function(err) {
         if (err) throw err;
