@@ -18,18 +18,6 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
         console.log(err)
     }
 
-    /*
-    if (req.query.reservation_lte) {
-        const reservation_lte = new Date(req.query.reservation_lte).toISOString();
-        mongoQuery.reserved_to = { '$lte': reservation_lte };
-    }; 
-
-    if (req.query.reservation_gte) {
-        const reservation_gte = new Date(req.query.reservation_gte).toISOString();
-        mongoQuery.reserved_from = { '$gte': reservation_gte };
-    };
-    */
-
     // Find Reservations based on specified query
     const reservations = await Reservation.find(mongoQuery);
     res.send(reservations);

@@ -25,7 +25,6 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
     }
 
     // reservation_gte, reservation_lte
-    // doesnt work when room has multiple reservation and one is in the time range and other is not
     if (req.query.vacant_to || req.query.vacant_from) {
         let reservationQuery = {};
 
@@ -34,10 +33,6 @@ router.get('/', middleware.verifyJWT, async (req, res) => {
             req.query.vacant_to ? (reservationQuery.reserved_from = { '$lt': new Date(req.query.vacant_to).toISOString() }) : '';
             const reservations = await Reservations.find({ $or: [reservationQuery] }, '_id');
 
-            //req.query.vacant_from ? (reservationQuery.reserved_from = { '$gte': new Date(req.query.vacant_from).toISOString() }) : '';
-            //req.query.vacant_to ? (reservationQuery.reserved_to = { '$lte': new Date(req.query.vacant_to).toISOString() }) : '';
-            //const reservations = await Reservations.find({ reservationQuery }, '_id');
-            
             mongoQuery.reservations = { $not: { $in: reservations }};
         } catch (err) {
             console.log(err)
