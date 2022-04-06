@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
-const middleware = require('../middleware')
+const { verifyJWT } = require('../middleware');
 const Reservation = require('../../models/Reservations');
 const mongoose = require('mongoose')
 
+const router = express.Router();
+
 // Returns reservation based on specified id
-router.get('/:id', middleware.verifyJWT, async (req, res) => {
+router.get('/:id', verifyJWT, async (req, res) => {
     try {
         const reservation = await Reservation.findById(mongoose.Types.ObjectId(req.params.id));
         if (!reservation) throw 'Record doesnt exist';

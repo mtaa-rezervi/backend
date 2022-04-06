@@ -1,13 +1,14 @@
 const express = require('express');
-const router = express.Router();
-const middleware = require('../middleware')
+const { verifyJWT } = require('../middleware');
 const Room = require('../../models/Rooms');
 const Reservation = require('../../models/Reservations');
 const User = require('../../models/Users');
 const mongoose = require('mongoose');
 
+const router = express.Router();
+
 // Deletes a single room based on specified id
-router.delete('/:id', middleware.verifyJWT, async (req, res) => {    
+router.delete('/:id', verifyJWT, async (req, res) => {    
     try {
         var roomID = mongoose.Types.ObjectId(req.params.id)
     } catch (err) {

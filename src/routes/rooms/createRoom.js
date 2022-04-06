@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const middleware = require('../middleware')
+const { verifyJWT } = require('../middleware');
 const Room = require('../../models/Rooms');
 const User = require('../../models/Users');
 const mongoose = require('mongoose')
@@ -11,7 +11,7 @@ const router = express.Router();
 const upload = multer();
 
 // Creates a new room
-router.post('/', middleware.verifyJWT, upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'images', maxCount: 6 }]), async (req, res) => {
+router.post('/', verifyJWT, upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'images', maxCount: 6 }]), async (req, res) => {
     if (req.body.json) req.body = JSON.parse(req.body.json);
 
     // Schema for validating request body

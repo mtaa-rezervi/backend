@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router({ mergeParams: true });
-const middleware = require('../middleware')
+const { verifyJWT, verifyUserID } = require('../middleware');
 const mongoose = require('mongoose');
 const Users = require('../../models/Users');
 
+const router = express.Router({ mergeParams: true });
+
 // Returns a list of users active listings
-router.get('/', middleware.verifyJWT, async (req, res) => {
+router.get('/', verifyJWT, verifyUserID, async (req, res) => {
     try {
         const user = await Users
             .findById(mongoose.Types.ObjectId(req.params.id), '_id active_listings')

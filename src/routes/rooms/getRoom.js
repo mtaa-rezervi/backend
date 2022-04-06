@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
-const middleware = require('../middleware')
+const { verifyJWT } = require('../middleware');
 const Room = require('../../models/Rooms');
 const mongoose = require('mongoose');
 
+const router = express.Router();
+
 // Returns a single room based on specified id
-router.get('/:id', middleware.verifyJWT, async (req, res) => {    
+router.get('/:id', verifyJWT, async (req, res) => {    
     try {
         const room = await Room.findById(mongoose.Types.ObjectId(req.params.id));
         if (!room) throw 'Record doesnt exist';

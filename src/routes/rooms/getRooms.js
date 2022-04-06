@@ -1,10 +1,11 @@
 const express = require('express');
-const router = express.Router();
-const middleware = require('../middleware')
+const { verifyJWT } = require('../middleware');
 const Room = require('../../models/Rooms');
 
+const router = express.Router();
+
 // Returns a list of rooms
-router.get('/', middleware.verifyJWT, async (req, res) => {
+router.get('/', verifyJWT, async (req, res) => {
     let mongoQuery = {};
     
     // name
