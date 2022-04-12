@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const middleware = require('../middleware')
+const { verifyJWT, verifyUserID } = require('../middleware');
 const mongoose = require('mongoose');
 const Users = require('../../models/Users');
 const Joi = require('joi');
@@ -12,7 +12,7 @@ const router = express.Router({ mergeParams: true });
 
 
 // Updates particular user 
-router.put('/', middleware.verifyJWT, upload.single('image'), async (req, res) => {
+router.put('/', verifyJWT, verifyUserID, upload.single('image'), async (req, res) => {
     try {
         var user = await Users.findById(
             mongoose.Types.ObjectId(req.params.id), 

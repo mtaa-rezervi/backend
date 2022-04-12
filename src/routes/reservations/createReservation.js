@@ -1,5 +1,5 @@
 const express = require('express');
-const middleware = require('../middleware')
+const { verifyJWT } = require('../middleware');
 const Room = require('../../models/Rooms');
 const User = require('../../models/Users');
 const Reservation = require('../../models/Reservations')
@@ -30,7 +30,7 @@ const userIDValidation = async (id) => {
 };
 
 // Creates a new reservation
-router.post('/', middleware.verifyJWT, async (req, res) => {
+router.post('/', verifyJWT, async (req, res) => {
     let errorMessages = { errors: [] }
 
     // Schema for validating request body
