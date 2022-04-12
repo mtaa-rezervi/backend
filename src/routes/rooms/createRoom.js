@@ -10,6 +10,17 @@ const Joi = require('joi');
 const router = express.Router();
 const upload = multer();
 
+// Owner ID validation method
+const ownerIDValidation = async (id) => {
+    try {
+        const userExists = await User.exists({ _id: id });
+        if (!userExists) throw 'Wrong user_id';
+        return null;
+    } catch {
+        return { field: 'owner_id', message: 'wrong owner_id' };
+    }
+};
+
 // Creates a new room
 router.post('/', verifyJWT, upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'images', maxCount: 6 }]), async (req, res) => {
     if (req.body.json) req.body = JSON.parse(req.body.json);
@@ -32,8 +43,18 @@ router.post('/', verifyJWT, upload.fields([{ name: 'thumbnail', maxCount: 1 }, {
     // Validate request body
     let { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
-        const errorMessages = error.details.map(x => ({ 'field': x.path[0], 'message': x.message.replace(/"/g, '') }));
-        return res.status(422).send({ errors: errorMessages });
+        var errorFields = error.details.map(x => (x.path[0]));
+        error.details.map(x => (errorMessages.errors.push({ 'field': x.path[0], 'message': x.message.replace(/"/g, '') })));
+    }
+
+    if (!errorFields || !errorFields.includes('owner_id')) {
+        error = await ownerIDValidation(req.body.owner_id);
+        if (error) errorMessages.errors.push(error);
+    } 
+
+    // Send error messages
+    if (errorMessages.errors.length > 0) {
+        return res.status(422).send(errorMessages);
     }
 
     // Create a new room

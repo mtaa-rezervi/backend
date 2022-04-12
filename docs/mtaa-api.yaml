@@ -33,19 +33,19 @@ paths:
             type: integer
             format: uint32
             example: 6
-        - name: amenity
+        - name: amenity[]
           in: query
           description: The rooms amenity 
           schema:
             type: string
             example: "whiteboard"
-        - name: reservation_lte
+        - name: vacant_to
           in: query
           description: Reservation date in ISO format 
           schema:
             type: string
             format: date-time
-        - name: reservation_gte
+        - name: vacant_from
           in: query
           description: Reservation date in ISO format
           schema:

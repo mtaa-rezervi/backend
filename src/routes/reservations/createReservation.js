@@ -38,7 +38,7 @@ router.post('/', verifyJWT, async (req, res) => {
         room_id: Joi.string().hex().length(24).required(),
         user_id: Joi.string().hex().length(24).required(),
         reserved_from: Joi.date().iso().required(),
-        reserved_to: Joi.date().iso().required()
+        reserved_to: Joi.date().iso().greater(Joi.ref('reserved_from')).required()
     });
 
     // Validate request body
@@ -62,6 +62,18 @@ router.post('/', verifyJWT, async (req, res) => {
     if (errorMessages.errors.length > 0) {
         return res.status(422).send(errorMessages);
     }
+    
+    // https://stackoverflow.com/a/33210174
+    const reservatioExists = await Reservation.exists({
+        'room_id': req.body.room_id,
+        $or: [{
+            'reserved_to': { '$gte': req.body.reserved_from },
+            'reserved_from': { '$lte': req.body.reserved_to }
+        }]
+    });
+
+    //console.log(reservatioExists)
+    if (reservatioExists) return res.status(409).send({ error: { message: 'Reservation for specified date already exists' }});
 
     // Create new reservation
     const newReservation = await Reservation.create({
