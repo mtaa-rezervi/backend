@@ -83,8 +83,26 @@ router.post('/', verifyJWT, async (req, res) => {
         reserved_to: req.body.reserved_to
     });
 
-    // Updates arrays in specified User and Room
-    await User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.user_id), { $push: { active_reservations: newReservation._id } });
+    // Find the specified room 
+    const room = await Room.findById(req.body.room_id);
+
+    // Create notifications for the user and owner of the room 
+    const userNoti = { 
+        time: new Date(Date.now()), 
+        type: 'new_booking',
+        text: `You have just reserved a room, ${room.name} on ${room.address.street}!`, 
+        reservation_id: newReservation._id
+    };
+
+    const ownerNoti = { 
+        time: new Date(Date.now()), 
+        type: 'booked_room',
+        text: `Someone has just reserved your room, ${room.name} on ${room.address.street}!`, 
+    };
+
+    // Updates arrays in specified User, Room and Owner of the Room
+    await User.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.user_id), { $push: { active_reservations: newReservation._id, notifications: userNoti } });
+    await User.findByIdAndUpdate(mongoose.Types.ObjectId(room.owner_id), { $push: { notifications: ownerNoti } });
     await Room.findByIdAndUpdate(mongoose.Types.ObjectId(req.body.room_id), { $push: { reservations: newReservation._id } });
 
     res.status(201).send(newReservation);
