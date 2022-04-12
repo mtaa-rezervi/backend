@@ -5,8 +5,6 @@ const Reservations = require('../../models/Reservations');
 
 const router = express.Router();
 
-const router = express.Router();
-
 // Returns a list of rooms
 router.get('/', verifyJWT, async (req, res) => {
     let mongoQuery = {};
