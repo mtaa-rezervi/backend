@@ -12,6 +12,7 @@ router.get('/', verifyJWT, async (req, res) => {
     req.query.name ? (mongoQuery.name = { $regex: req.query.name }) : '';
     req.query.amenity ? (mongoQuery.amenities = { $all: req.query.amenity }) : '';
     req.query.owner_id ? (mongoQuery.owner_id = req.query.owner_id) : '';
+    req.query.id ? (mongoQuery._id = { $in: req.query.id }) : '';
 
     // num_of_seats_gte, num_of_seats_lte
     if (req.query.num_of_seats_gte && req.query.num_of_seats_lte) {
@@ -40,8 +41,12 @@ router.get('/', verifyJWT, async (req, res) => {
     };
     
     // Find Rooms based on specified query
-    const rooms = await Room.find(mongoQuery, '_id name info amenities number_of_seats thumbnail_url');
-    res.status(200).send(rooms);
+    try {
+        const rooms = await Room.find(mongoQuery, '_id name info amenities number_of_seats thumbnail_url');
+        res.status(200).send(rooms);
+    } catch {
+        res.status(200).send([]);
+    }
 });
 
 module.exports = router;

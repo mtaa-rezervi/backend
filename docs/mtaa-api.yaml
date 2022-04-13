@@ -39,6 +39,12 @@ paths:
           schema:
             type: string
             example: "whiteboard"
+        - name: id[]
+          in: query
+          description: id of the room 
+          schema:
+            type: string
+            example: "578f6fa2df35c7fbdbaed8d9"
         - name: vacant_to
           in: query
           description: Reservation date in ISO format 
