@@ -23,7 +23,8 @@ const ownerIDValidation = async (id) => {
 
 // Creates a new room
 router.post('/', verifyJWT, upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'images', maxCount: 6 }]), async (req, res) => {
-    if (req.body.json) req.body = JSON.parse(req.body.json);
+		let errorMessages = { errors: [] }    
+		if (req.body.json) req.body = JSON.parse(req.body.json);
 
     // Schema for validating request body
     const schema = Joi.object({
