@@ -496,7 +496,7 @@ paths:
             application/json:
               schema:
                $ref:  '#/components/schemas/ErrorBadToken'
-  /users/{id}/active-listnings:
+  /users/{id}/active-listings:
     get:
       security:
         - bearerAuth: [] 
