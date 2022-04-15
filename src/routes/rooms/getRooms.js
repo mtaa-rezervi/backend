@@ -18,7 +18,7 @@ router.get('/', verifyJWT, async (req, res) => {
     req.query.zip ? (mongoQuery['address.zip'] = new RegExp(`^${req.query.zip}$`)) : '';
     req.query.state ? (mongoQuery['address.state'] = new RegExp(`^${req.query.state}$`)) : '';
 
-    console.log(mongoQuery)
+    //console.log(mongoQuery)
 
     // num_of_seats_gte, num_of_seats_lte
     if (req.query.num_of_seats_gte && req.query.num_of_seats_lte) {
