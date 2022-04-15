@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 dotenv.config();
 
 // Connect to mongo
-mongoose.connect(process.env.DB_CONNECTION, () => console.log('Mongo connected'));
+mongoose.connect(process.env.DB_CONNECTION_PRO, () => console.log('Mongo connected'));
 
 // Default route
 app.get('/', (req, res) => {

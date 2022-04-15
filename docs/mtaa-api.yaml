@@ -19,6 +19,30 @@ paths:
           schema:
             type: string
             example: "Big conference room"
+        - name: street
+          in: query
+          description: Street
+          schema:
+            type: string
+            example: "CarrotStreet"
+        - name: city
+          in: query
+          description: City
+          schema:
+            type: string
+            example: "CarrotVille"
+        - name: zip
+          in: query
+          description: Zip code
+          schema:
+            type: string
+            example: "13131"
+        - name: state
+          in: query
+          description: State
+          schema:
+            type: string
+            example: "VegetableLand"
         - name: num_of_seats_lte
           in: query
           description: The number of seats in the room
