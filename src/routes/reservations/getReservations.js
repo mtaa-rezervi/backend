@@ -19,7 +19,7 @@ router.get('/', verifyJWT, async (req, res) => {
     }
 
     // Find Reservations based on specified query
-    const reservations = await Reservation.find(mongoQuery).sort({ reserved_from: -1 });
+    const reservations = await Reservation.find(mongoQuery).sort({ reserved_from: 1 });
     //reservations = user.notifications.sort((a, b) => new Date(b.time) - new Date(a.time));
     res.send(reservations);
 });
