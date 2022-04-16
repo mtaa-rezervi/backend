@@ -48,7 +48,7 @@ router.get('/', verifyJWT, async (req, res) => {
     
     // Find Rooms based on specified query
     try {
-        const rooms = await Room.find(mongoQuery, '_id name info amenities number_of_seats thumbnail_url');
+        const rooms = await Room.find(mongoQuery, '_id name info amenities number_of_seats thumbnail_url').sort({ created_at: -1 });
         res.status(200).send(rooms);
     } catch {
         res.status(200).send([]);
