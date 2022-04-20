@@ -668,6 +668,25 @@ paths:
                       type: object
                       example: 
                         message: "Email already in use"
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        field:
+                          type: string
+                          example: 'password'
+                        message:
+                          type: string
+                          example: 'password length must be at least 6 characters long'
+                
   /users/login:
     post:
       summary: 'Authenticates the user and generates new auth-token'
