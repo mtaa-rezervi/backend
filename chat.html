@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test chat</title>
+</head>
+<body>
+    <h1 style='color: #03a5fc; font-family: Trebuchet MS;'> Welcome to test chat room 🤓 </h1>
+    <hr size="1" width="100%" color= #adadad>
+    <li id="messages" style="list-style-type: none;">
+    </li>
+    <!-- <pre id="messages" style="height: 400px; overflow: scroll; background-color: #56eab1;"></pre> -->
+    <input type="text" id="messageBox" placeholder="message" style="width: 50%; margin-bottom: 10px; padding: 10px;" />
+    <button onclick="sendMessage( messageBox.value)"> Send message </button>
+</body>
+<script>
+    const socket = new WebSocket('ws:localhost:3000/chat');
+    
+    socket.addEventListener('open', () => {
+        // send a message to the server
+        console.log('Room opened');
+    });
+
+    // receive a message from the server
+    socket.addEventListener('message', ({ data }) => {
+        showOtherMessage(data);
+    });
+
+    const sendMessage = (message) => {
+        socket.send(message);
+        showMyMessage(message);
+        messageBox.value = '';
+    };
+
+    const showMyMessage = (message) => {
+        const newMessage = '<p style=\'background-color: #56eab1; font-family: Trebuchet MS;\'>' + message + '</p>';
+        let messages = document.getElementById('messages');
+        messages.innerHTML += newMessage;
+    };
+
+    const showOtherMessage = (message) => {
+        const newMessage = '<p style=\'background-color: #d8d8d8; font-family: Trebuchet MS;\'>' + message + '</p>';
+        let messages = document.getElementById('messages');
+        messages.innerHTML += newMessage;
+        // messages.textContent += `\n\n${message}`;
+        // messages.scrollTop = messages.scrollHeight;
+    };
+</script>
+</html>

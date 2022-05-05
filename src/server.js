@@ -1,8 +1,14 @@
 const express = require('express');
-const app = express();
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
+const http = require('http');
+const app = express();
+const server = http.createServer(app);
+
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ server, path: '/chat' });
 
 dotenv.config();
 
@@ -16,11 +22,35 @@ app.get('/', (req, res) => {
 
 // Middleware
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+    req.wss = wss;
+    return next();
+});
 
 // Routes
 app.use('/users', require('./routes/users'));
 app.use('/rooms', require('./routes/rooms'));
 app.use('/reservations', require('./routes/reservations'));
+//app.use('/chat', require('./routes/chat'))
+
+// Chat
+wss.on('connection', (ws) => {
+    console.log('new user')
+
+    // send a message to the client
+    ws.send('Welcome');
+
+    // receive a message from the client
+    ws.on('message', (message) => {
+        console.log(message.toString())
+
+        wss.clients.forEach((client) => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                client.send(message.toString());
+            }
+        })
+    });
+})
 
 // Start the server
-app.listen(process.env.PORT || 3000, () => console.log('Server running'));
+server.listen(process.env.PORT || 3000, () => console.log('Server running'));
