@@ -9,6 +9,7 @@ const server = http.createServer(app);
 
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ server, path: '/chat' });
+app.set("wss", wss)
 
 dotenv.config();
 
@@ -22,10 +23,10 @@ app.get('/', (req, res) => {
 
 // Middleware
 app.use(bodyParser.json());
-app.use((req, res, next) => {
-    req.wss = wss;
-    return next();
-});
+// app.use((req, res, next) => {
+//     req.wss = wss;
+//     return next();
+// });
 
 // Routes
 app.use('/users', require('./routes/users'));
@@ -35,20 +36,24 @@ app.use('/reservations', require('./routes/reservations'));
 
 // Chat
 wss.on('connection', (ws) => {
-    console.log('new user')
-
+    // console.log('new user')
+    
     // send a message to the client
-    ws.send('Welcome');
+    // ws.send('Welcome');
 
     // receive a message from the client
     ws.on('message', (message) => {
         console.log(message.toString())
-
         wss.clients.forEach((client) => {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(message.toString());
             }
         })
+    });
+
+    ws.on('close', (data) => {
+        console.log('disconnected')
+        //console.log(data);
     });
 })
 

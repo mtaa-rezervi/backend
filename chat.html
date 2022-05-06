@@ -13,10 +13,12 @@
     </li>
     <!-- <pre id="messages" style="height: 400px; overflow: scroll; background-color: #56eab1;"></pre> -->
     <input type="text" id="messageBox" placeholder="message" style="width: 50%; margin-bottom: 10px; padding: 10px;" />
-    <button onclick="sendMessage( messageBox.value)"> Send message </button>
+    <button onclick="sendMessage(messageBox.value)"> Send message </button>
+
+    <button onclick="disconnect()"> Disconnect </button>
 </body>
 <script>
-    const socket = new WebSocket('ws:localhost:3000/chat');
+    const socket = new WebSocket('ws://192.168.1.194:3000/chat');
     
     socket.addEventListener('open', () => {
         // send a message to the server
@@ -46,6 +48,10 @@
         messages.innerHTML += newMessage;
         // messages.textContent += `\n\n${message}`;
         // messages.scrollTop = messages.scrollHeight;
+    };
+
+    const disconnect = () => {
+        socket.close();
     };
 </script>
 </html>
