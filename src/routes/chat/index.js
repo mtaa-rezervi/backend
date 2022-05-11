@@ -5,4 +5,6 @@ const router = express.Router();
 router.use('/', require('./saveMessage'));
 router.use('/', require('./getMessages'));
 
+router.use('/dms', require('./getDms'));
+
 module.exports = router;
