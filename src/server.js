@@ -7,9 +7,13 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 
+const { Server } = require("socket.io");
+const socketio = new Server(server);
+/*
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ server, path: '/chat' });
 app.set("wss", wss)
+*/
 
 dotenv.config();
 
@@ -34,6 +38,7 @@ app.use('/rooms', require('./routes/rooms'));
 app.use('/reservations', require('./routes/reservations'));
 //app.use('/chat', require('./routes/chat'))
 
+/*
 // Chat
 wss.on('connection', (ws) => {
     // console.log('new user')
@@ -56,6 +61,33 @@ wss.on('connection', (ws) => {
         //console.log(data);
     });
 })
+*/
+
+
+socketio.on("connection", socket => {
+    //socket.removeAllListeners();
+    console.log("client connected: ", socket.id);
+
+    socket.on("join_room", data => {
+        socket.join(data.room_name);
+        console.log("user joined room: ", data.room_name);
+    })
+
+    socket.on("leave_room", data => {
+        socket.leave(data.room_name);
+        console.log("user left room: ", data.room_name);
+    })
+
+    socket.on("message", data => {
+        console.log("message: ", data.message);
+        console.log("from socket: ", socket.id);
+        console.log("---------------");
+        
+        socketio.to(data.roomName).emit("message", data.message);
+    })
+
+    
+});
 
 // Start the server
 server.listen(process.env.PORT || 3000, () => console.log('Server running'));
