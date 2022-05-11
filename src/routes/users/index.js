@@ -5,6 +5,7 @@ const router = express.Router();
 router.use('/login', require('./login'));
 router.use('/register', require('./register'));
 
+router.use('/all', require('./getAllUsers'));
 router.use('/:id', require('./getUser'));
 router.use('/:id', require('./updateUser'));
 
