@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 app.use('/users', require('./routes/users'));
 app.use('/rooms', require('./routes/rooms'));
 app.use('/reservations', require('./routes/reservations'));
+app.use('/chat', require('./routes/chat'));
 
 // Start the server
 app.listen(process.env.PORT || 3000, () => console.log('Server running'));
