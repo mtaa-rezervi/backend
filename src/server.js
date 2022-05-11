@@ -36,7 +36,7 @@ app.use(bodyParser.json());
 app.use('/users', require('./routes/users'));
 app.use('/rooms', require('./routes/rooms'));
 app.use('/reservations', require('./routes/reservations'));
-//app.use('/chat', require('./routes/chat'))
+app.use('/chat', require('./routes/chat'));
 
 /*
 // Chat
@@ -62,7 +62,6 @@ wss.on('connection', (ws) => {
     });
 })
 */
-
 
 socketio.on("connection", socket => {
     //socket.removeAllListeners();

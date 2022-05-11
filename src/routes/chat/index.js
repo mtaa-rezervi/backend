@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// DOESNT WORK !!!! //
-
 // /chat routes //
-router.use('/', require('./chat'));
+router.use('/', require('./saveMessage'));
+router.use('/', require('./getMessages'));
 
-module.exports = router
+module.exports = router;

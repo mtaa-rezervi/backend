@@ -727,7 +727,87 @@ paths:
                       type: object
                       example: 
                         message: "Wrong email"
-
+  
+  /chat:
+    get:
+        summary: 'Returns a list of messages based on specified arguments'
+        security:
+        - bearerAuth: [] 
+        tags:
+          - chat
+        parameters:
+          - name: user1
+            in: query
+            description: user id
+            schema:
+              type: string
+              example: '578f6fa2df35c7fbdbaed8d9'
+          - name: user2
+            in: query
+            description: user id
+            schema: 
+              type: string
+              example: '578f6fa2df35c7fbdbaed8cf'
+        responses:
+          '200':
+            description: Ok
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Messages'
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                 $ref:  '#/components/schemas/ErrorBadToken'
+    post:
+      summary: 'Saves new message to database'
+      security:
+        - bearerAuth: [] 
+      tags:
+        - chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  example: '578f6fa2df35c7fbdbaed8cf'
+                to:
+                  type: string
+                  example: '578f6fa2df35c7fbdbaed8fb'
+                time:
+                  type: string
+                  format: date-time
+                message:
+                  type: string
+                  example: 'Ahojky'
+                
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+               $ref:  '#/components/schemas/ErrorBadToken'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema: 
+                $ref:  '#/components/schemas/ErrorBadBody'
+  
+  
 components:
   schemas:
     User:
@@ -992,6 +1072,47 @@ components:
         reserved_to:
           type: string
           format: date-time
+          
+          
+    Messages:
+      type: array
+      items: 
+        type: object
+        properties:
+          id: 
+            type: string
+            example: '578f6fa2df35c7fbdbaed8fb'
+          from:
+            type: string
+            example: '578f6fa2df35c7fbdbaed8d9'
+          to:
+            type: string
+            example: '578f6fa2df35c7fbdbaed8cf'
+          time:
+            type: string
+            format: date-time
+          message:
+            type: string
+            example: 'Ahojky'
+          
+    Message:
+      type: object
+      properties:
+        id: 
+          type: string
+          example: '578f6fa2df35c7fbdbaed8fb'
+        from:
+          type: string
+          example: '578f6fa2df35c7fbdbaed8d9'
+        to:
+          type: string
+          example: '578f6fa2df35c7fbdbaed8cf'
+        time:
+          type: string
+          format: date-time
+        message:
+          type: string
+          example: 'Ahojky'
           
     ErrorDoesntExist:
       type: object
