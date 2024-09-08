@@ -1,5 +1,5 @@
 # backend
-Backend for our workspace reservation app made as an assigment for subject MTAA at FIIT
+Backend for our workspace reservation app made as an assigment for subject MTAA at FIIT. Made with Nodejs, Express and MongoDB.
 
 ## Instalation
 Start with cloning this repository:
